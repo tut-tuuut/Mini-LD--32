@@ -8,16 +8,16 @@ var myGame = function($, undefined) {
         var justfound = false;
         var found = [];
         var available = [
-                'titi', 'tata', 'toto'
+                'titi', 'tata'
             ];
         var names = {
-            titi: 'Title of my first Game',
-            tata: 'Title of the second Game',
+            titi: 'A simple memory',
+            tata: 'A chewing-gum and some hearts',
             toto: 'Title of the third game'
         };
         var links = {
-            titi: 'titi/index.html',
-            tata: 'tata/index.html',
+            titi: 'index.html',
+            tata: '2_simple_laby/index.html',
             toto: 'toto/index.html'
         }
         // Public game object

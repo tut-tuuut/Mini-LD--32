@@ -133,3 +133,8 @@ h1, h2 {
     margin-top: 47px;
     text-align: right;
 }
+.laby-2 canvas {
+    box-shadow: 0 0 4px #999;
+    display: block;
+    margin: 0 auto;
+}
