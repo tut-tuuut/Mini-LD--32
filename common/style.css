@@ -24,12 +24,14 @@ h1{font-size:138.5%}h2{font-size:123.1%}h3{font-size:108%}h1,h2,h3{margin:0.7em 
     font-style: normal;
 }
 html {
-    height: 100%;
+    min-height: 100%;
     background: url(vintage_speckles.png) repeat 50% 0;
     font-family: Arial, Helvetica, sans-serif;
 }
 body {
-    height: 100%;
+    min-height: 90%;
+    padding: 0 0 7%;
+    position: relative;
 }
 #global-wrap {
     background: rgba(255,255,255,0.7);
@@ -37,13 +39,63 @@ body {
     border-radius: 0 0 10px 10px;
     box-shadow: 0 0 5px rgba(100,100,100,0.2);
     width: 800px;
-    padding: 1px 50px;
-    height: 90%;
-    margin: 0 auto;
+    padding: 1px 50px 5%;
+    min-height: 90%;
+    margin: 0 auto 0;
 }
 h1, h2, h3, h4, h5, h6 {
     font: 60px/68px 'AmadeusRegular', Arial, sans-serif;letter-spacing: 0;
 }
 h1, h2 {
     text-align: center;
+}
+.blabla {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.7);
+    bottom: 0;
+    box-shadow: 0 0 5px rgba(100, 100, 100, 0.2);
+    color: #777;
+    left: 0;
+    padding: 7px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+}
+
+/* First mini game */
+.memory-1 #theGame table {
+    table-layout: fixed;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+.memory-1 #theGame table td {
+    width: 200px;
+    height: 200px;
+    padding: 0;
+    cursor: pointer;
+    background: url(../1_index_memory/tiles.png) no-repeat 0 0;
+}
+.memory-1 #theGame table td:not(.turned):hover {
+    border: 3px solid black;
+    width: 196px;
+    height: 196px;
+    background-position: -2px -2px;
+}
+.memory-1 #theGame table td.dead {
+    cursor: auto;
+    background: transparent;
+    border-color: transparent;
+}
+.memory-1 #theGame table td.turned {
+    cursor: auto;
+}
+/* turned tiles */
+.memory-1 #theGame table td.turned.toto {
+    background-position: -200px 0;
+}
+.memory-1 #theGame table td.turned.tata {
+    background-position: -400px 0;
+}
+.memory-1 #theGame table td.turned.titi {
+    background-position: -600px 0;
 }
