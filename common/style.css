@@ -60,7 +60,35 @@ h1, h2 {
     right: 0;
     text-align: center;
 }
-
+#topMenu {
+    background: rgba(255,255,255,0.5);
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 4px 0;
+    margin-bottom: 47px;
+}
+#topMenu, #botMenu {
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+}
+#topMenu a, #botMenu a {
+    background: url("texturetastic_gray.png") repeat scroll 0 0 transparent;
+    color: #666666;
+    display: inline-block;
+    font-variant: small-caps;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 13px;
+    text-decoration: none;
+    margin-right: 5px;
+}
+#topMenu a:hover, #botMenu a:hover {
+    color: #000;
+    border-left: 3px solid #000;
+    border-right: 3px solid #000;
+    padding: 0 10px;
+}
 /* First mini game */
 .memory-1 #theGame table {
     table-layout: fixed;
@@ -74,6 +102,7 @@ h1, h2 {
     padding: 0;
     cursor: pointer;
     background: url(../1_index_memory/tiles.png) no-repeat 0 0;
+    border-radius: 4px;
 }
 .memory-1 #theGame table td:not(.turned):hover {
     border: 3px solid black;
@@ -98,4 +127,9 @@ h1, h2 {
 }
 .memory-1 #theGame table td.turned.titi {
     background-position: -600px 0;
+}
+.memory-1 .cheat {
+    font-size: 11px;
+    margin-top: 47px;
+    text-align: right;
 }

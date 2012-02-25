@@ -1,26 +1,85 @@
-// Game object with a lot of useful functions!
-// Global for dev/debug purposes. It'll come back in its anonymous function one day.
-
 var myGame = function($, undefined) {
     $(document).ready(function() {
         // Array of available links
         var plate; // protected in function. This array contains the solution…
         var score = 0; // no one cares about the score, but I protect it too.
+        var returned = ['',''];
+        var lastcells = [];
+        var justfound = false;
+        var found = [];
+        var available = [
+                'titi', 'tata', 'toto'
+            ];
+        var names = {
+            titi: 'Title of my first Game',
+            tata: 'Title of the second Game',
+            toto: 'Title of the third game'
+        };
+        var links = {
+            titi: 'titi/index.html',
+            tata: 'tata/index.html',
+            toto: 'toto/index.html'
+        }
         // Public game object
         var game = {
-            container : 'theGame',
-            tiles : [],
-            returned : '',
+            container : $('#theGame'),
+            menuTop : $('#topMenu'),
+            menuBottom : $('#botMenu'),
             getScore : function() {
                     return score;
                 },
             turnCard : function (i, j) {
-                alert('You turned card '+i+','+j+'. Yay! Or almost. Sorry. I‘ve fallen asleep before implementing this function.')
+                if (plate[i,j] === 0) {
+                    return;
+                }
+                var cell = $('.row-' + i + '.col-' + j);
+                if (returned[0] === '') {
+                    returned[0] = plate[i][j];
+                    cell.addClass('turned').addClass(plate[i][j]);
+                    lastcells.push(cell);
+                } else if (returned[1] === '') {
+                    returned[1] = plate[i][j];
+                    cell.addClass('turned').addClass(plate[i][j]);
+                    lastcells.push(cell);
+                    if (returned[0] == returned[1]) {
+                        lastcells = [];
+                        this.addToMenu(returned[0]);
+                    }
+                } else {
+                    for (var x = 0; x < lastcells.length; x++) {
+                        lastcells[x].removeClass('turned')
+                                    .removeClass(returned[0])
+                                    .removeClass(returned[1]);
+                    }
+                    returned = ['',''];
+                    lastcells = [];
+                }
+            },
+            addToMenu : function(key) {
+                var name = key, link = key, linkobj;
+                if (available.indexOf(key) === -1) {
+                    return;
+                }
+                if (names[key] !== undefined) {
+                    name = names[key];
+                }
+                if (links[key] !== undefined) {
+                    link = links[key];
+                }
+                linkobj = $('<a></a>');
+                linkobj.attr('href', link).append(name);
+                game.menuTop.append(linkobj);
+                var secondobj = linkobj.clone();
+                game.menuBottom.append(secondobj);
+            },
+            generateFullMenu : function() {
+                this.menuTop.html('');
+                this.menuBottom.html('');
+                for (var i = 0; i < available.length; i++) {
+                    this.addToMenu(available[i]);
+                }
             }
         };
-        var available = [
-                'titi', 'tata', 'toto', 'kablah', 'bidule' 
-            ];
         // ----- Initialization stuff ------------------------------------------
         var getLinesAndCols = function(nbOfImages) {
             // This function generates the game array structure.
@@ -73,7 +132,8 @@ var myGame = function($, undefined) {
         plate = function() {
             var i,j, buff, deadcells = 0;
             var plate = [];
-            var lc = getLinesAndCols(available.length);
+            game.lc = getLinesAndCols(available.length);
+            var lc = game.lc;
             var tiles = [];
             for (i = 0; i < available.length; i++) {
                 tiles.push(available[i], available[i]);
@@ -121,17 +181,21 @@ var myGame = function($, undefined) {
                 }
                 table.append(row);
             }
-            $('#' + game.container).append(table);
+            game.container.append(table);
         }();
         var observer = function(){
             // Observe clicks on links
             // global game for debug/dev purpose
-            var table = $('#' + game.container + ' table');
+            var table = game.container.find('table');
             var colRegexp = /^col-([0-9]+)$/;
             var rowRegexp = /^row-([0-9]+)$/;
             var col, row;
             table.on('click.pouet', 'td', function(obj) {
-                col = false; row = false;
+                var o = $(this);
+                if (o.hasClass('dead') || o.hasClass('turned')) {
+                    return false;
+                }
+                col = false;row = false;
                 var classes = $(this).attr('class');
                 classes = classes.split(' ');
                 for (var i = 0; i < classes.length; i++) {
@@ -146,8 +210,9 @@ var myGame = function($, undefined) {
                     game.turnCard(row, col);
                 }
             });
+            $('#cheat').click(function() {game.generateFullMenu()});
         }();
-        
+        myGame = game;
 
     });
 }(jQuery);
