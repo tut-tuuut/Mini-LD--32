@@ -15,7 +15,7 @@ var myGame = function($, undefined) {
             tata: 'A chewing-gum and some hearts',
             toto: 'Arkabloid',
             maze: 'Amazing blob maze',
-            meaow: 'Kitten‘s eye'
+            meaow: 'Kitten’s eye'
         };
         var links = {
             titi: 'index.html',
