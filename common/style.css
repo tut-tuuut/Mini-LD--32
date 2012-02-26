@@ -228,17 +228,62 @@ a:hover {
     margin: 0 9px 5px 0;
 }
 .k-5 #choicePlate {
+    clear: both;
     height: 409px;
     padding: 22px 0 22px 22px;
     overflow: auto;
     background: url("texturetastic_gray.png") repeat scroll 0 0 transparent;
 }
-.k-5 #choicePlate::after {
+.k-5 #topGame {
+    min-height: 240px;
+}
+.k-5 #choicePlate::after,
+.k-5 #topGame::after {
     display: block;
     content: ' ';
     clear: both;
     height: 0;
 }
+.k-5 .score-container {
+    float: right;
+    line-height: 90px;
+}
 .k-5 #score {
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 1em;
+    display: inline-block;
     font: 60px/68px 'AmadeusRegular',Arial,sans-serif;
+    margin-left: 8px;
+    padding: 5px;
+    text-align: center;
+    vertical-align: bottom;
+    width: 140px;
+}
+.k-5 #model {
+    position: relative;
+    z-index: 3;
+}
+.k-5 #model::before {
+    background: url("../5_kitty_generator/sprites.png") no-repeat scroll 82% 0 transparent;
+    content: " ";
+    display: block;
+    height: 110px;
+    left: 152px;
+    position: absolute;
+    top: -29px;
+    width: 110px;
+}
+.k-5 #model::after {
+    background: url("../5_kitty_generator/sprites.png") no-repeat scroll 100% 0 transparent;
+    content: " ";
+    display: block;
+    height: 110px;
+    left: 408px;
+    position: absolute;
+    top: 160px;
+    width: 110px;
+}
+#beginButton {
+    margin-top: 84px;
 }
