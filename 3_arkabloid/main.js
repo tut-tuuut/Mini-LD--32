@@ -6,7 +6,6 @@
  *   Step by step game creation tutorial
  *
  **/
-alreadylogged = false;
 //game resources
 var g_resources = [{
     name: 'laby',
