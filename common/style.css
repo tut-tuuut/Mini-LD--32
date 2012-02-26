@@ -212,7 +212,7 @@ a:hover {
 }
 /* Furr types */
 .k-5 .k.f-grey {
-    background-position: -576px -257px;
+    background-position: 0 -485px;
 }
 .k-5 .k.f-white {
     background-position: -193px -485px;
@@ -223,19 +223,22 @@ a:hover {
 .k-5 .k.f-orange {
     background-position: -577px -485px;
 }
-#choicePlate .k {
+.k-5 #choicePlate .k {
     float: left;
     margin: 0 9px 5px 0;
 }
-#choicePlate {
+.k-5 #choicePlate {
     height: 409px;
     padding: 22px 0 22px 22px;
     overflow: auto;
     background: url("texturetastic_gray.png") repeat scroll 0 0 transparent;
 }
-#choicePlate::after {
+.k-5 #choicePlate::after {
     display: block;
     content: ' ';
     clear: both;
     height: 0;
+}
+.k-5 #score {
+    font: 60px/68px 'AmadeusRegular',Arial,sans-serif;
 }

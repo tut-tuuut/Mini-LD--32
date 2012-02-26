@@ -11,18 +11,23 @@ var myGame = function($, undefined) {
             var __defaultFurr = 'grey';
             var __defaultDeco = 'marb';
             var __defaultEyes = 'blue';
+
             return function(params) {
+                if (!params) {
+                    params = {}
+                }
                 var _container, _caracs;
                 __number++;
                 var kitten = {
-                    furr : params.furr || __defaultFurr,
-                    deco : params.deco || __defautlDeco,
-                    eyes : params.eyes || __defaultEyes,
+                    furr : params.furr || furrs[utils.randInteger(0, furrs.length - 1)],
+                    deco : params.deco || decos[utils.randInteger(0, decos.length - 1)],
+                    eyes : params.eyes || eyes[utils.randInteger(0, eyes.length - 1)],
                     getKittenNumber : function() {
                         return __number;
                     },
                     draw : function() {
                         // My kitten has divitis. :'(
+                            // (or is it me? Oh.)
                         var container = $('<div><div><div></div></div><span class="e"></span></div>');
                         container
                             .addClass('k')
@@ -42,12 +47,43 @@ var myGame = function($, undefined) {
                 return Math.floor(Math.random() * (max - min + 1) + min); // Thanks @fetard :p
             }
         };
+
+        // protected variables used by game object
+        var _game = {
+            score : 0,
+            gameStates : {
+                BEFORE  : 0,
+                PLAY    : 1,
+                WON     : 2
+            },
+            state : 0,
+            justClicked : '',
+            model : {},
+            newModel : function() {
+                this.model = getNewKitten();
+                console.log(this.model);
+                game.modelContainer.html(this.model.draw());
+            },
+            addToScore : function(points) {
+                this.score += points;
+                game.scoreContainer.html(this.score);
+            }
+        }
+
         // Public game object
         var game = {
             container : $('#theGame'),
+            modelContainer : $('#model'),
             choicePlate : $('#choicePlate'),
-            draw : function() {
+            scoreContainer : $('#score'),
+            testRegexps : {
+                furr: /f-([a-z]+)/,
+                eyes: /e-([a-z]+)/,
+                deco: /d-([a-z]+)/,
+            },
+            init : function() {
                 var i, j, kittens, choiceContent, kittyContent;
+                // Draw choices of possible kittens -----------------------
                 kittens = [];
                 for(var f = 0; f < furrs.length; f++) {
                     for (var d = 0; d < decos.length; d++) {
@@ -78,42 +114,36 @@ var myGame = function($, undefined) {
                     choiceContent.append(kittyContent);
                 }
                 this.choicePlate.append(choiceContent);
+                // Bind click on kittens of place choice -----------------------------
+                this.choicePlate.on('click.meaow', '.k', function() {
+                    console.log($(this).attr('class'));
+                    _game.justClicked = $(this).attr('class');
+                    game.compareClickedAndModel();
+                });
+                // Bind "begin" button -----------------------------------------------
+                $('#beginButton').on('click.meaow', function() {
+                    _game.newModel();
+                    _game.state = _game.gameStates.PLAY;
+                });
             },
+            compareClickedAndModel : function() {
+                var furr = this.testRegexps.furr.exec(_game.justClicked);
+                var eyes = this.testRegexps.eyes.exec(_game.justClicked);
+                var deco = this.testRegexps.deco.exec(_game.justClicked);
+                if (furr && eyes && deco) {
+                    if (    _game.model.furr == furr[1]
+                        &&  _game.model.deco == deco[1]
+                        &&  _game.model.eyes == eyes[1]) {
+                        _game.newModel();
+                        _game.addToScore(10);
+                    } else {
+                        //TODO losing message
+                        _game.addToScore(-1);
+                    }
+                }
+            }
         };
-        game.draw();
-        // Create tiles array
-        
-        /*
-        var observer = function(){
-            // Observe clicks on links
-            // global game for debug/dev purpose
-            var table = game.container.find('table');
-            var colRegexp = /^col-([0-9]+)$/;
-            var rowRegexp = /^row-([0-9]+)$/;
-            var col, row;
-            table.on('click.pouet', 'td', function(obj) {
-                var o = $(this);
-                if (o.hasClass('dead') || o.hasClass('turned')) {
-                    return false;
-                }
-                col = false;row = false;
-                var classes = $(this).attr('class');
-                classes = classes.split(' ');
-                for (var i = 0; i < classes.length; i++) {
-                    if (colRegexp.test(classes[i])) {
-                        col = colRegexp.exec(classes[i])[1];
-                    }
-                    if (rowRegexp.test(classes[i])) {
-                        row = rowRegexp.exec(classes[i])[1];
-                    }
-                }
-                if (row !== false && col !== false) {
-                    game.turnCard(row, col);
-                }
-            });
-            $('#cheat').click(function() {game.generateFullMenu()});
-        }();
-        myGame = game;*/
-
+        game.init();
+        myGame = game;
     });
 }(jQuery);
