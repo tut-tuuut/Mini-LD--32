@@ -154,3 +154,88 @@ a:hover {
     display: block;
     margin: 0 auto;
 }
+/* Kitten generator */
+.k-5 .k,
+.k-5 .k div {
+    width: 177px;
+    height: 211px;
+    background: url(../5_kitty_generator/sprites.png) no-repeat -753px -100px;
+}
+.k-5 .k {
+    /* furr */
+    position: relative;
+}
+.k-5 .k > div {
+    /* furr decoration */
+    position: relative;
+    z-index: 2;
+}
+.k-5 .k > div > div {
+    /* contour */
+    background-position: 0 0;
+}
+.k-5 .k .e {
+    display: block;
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    top: 63px;
+    height: 40px;
+    background: url(../5_kitty_generator/sprites.png) no-repeat -700px -220px;
+}
+/* eye types */
+.k-5 .k.e-blue .e {
+    background-position: 0 -220px;
+}
+.k-5 .k.e-green .e {
+    background-position: -192px -220px;
+}
+.k-5 .k.e-yell .e {
+    background-position: -384px -220px;
+}
+.k-5 .k.e-white .e {
+    background-position: -577px -220px;
+}
+/* decoration types */
+.k-5 .k.d-marb > div {
+    background-position: 0 -257px;
+}
+.k-5 .k.d-tache > div {
+    background-position: -192px -257px
+}
+.k-5 .k.d-ray > div {
+    background-position: -385px -257px;
+}
+.k-5 .k.d-white > div {
+    background-position: -576px -257px;
+}
+/* Furr types */
+.k-5 .k.f-grey {
+    background-position: -576px -257px;
+}
+.k-5 .k.f-white {
+    background-position: -193px -485px;
+}
+.k-5 .k.f-brown {
+    background-position: -384px -485px;
+}
+.k-5 .k.f-orange {
+    background-position: -577px -485px;
+}
+#choicePlate .k {
+    float: left;
+    margin: 0 9px 5px 0;
+}
+#choicePlate {
+    height: 409px;
+    padding: 22px 0 22px 22px;
+    overflow: auto;
+    background: url("texturetastic_gray.png") repeat scroll 0 0 transparent;
+}
+#choicePlate::after {
+    display: block;
+    content: ' ';
+    clear: both;
+    height: 0;
+}
