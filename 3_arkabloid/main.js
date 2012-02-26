@@ -159,7 +159,6 @@ var BlobEntity = me.ObjectEntity.extend({
             if (res.obj.type == me.game.ENEMY_OBJECT ) {
                 if (this.vel.y != 0) {
                     this.vel.y = - 2*this.accel.y*this.vel.y;
-                    console.log(res.obj.pos.x, this.pos.x, res.obj.pos.x - this.pos.x);
                     this.vel.x = -2*(res.obj.pos.x - this.pos.x + 36) - this.vel.x;
                 }
             } else if (res.obj.type == me.game.COLLECTABLE_OBJECT) {

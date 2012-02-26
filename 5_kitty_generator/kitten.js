@@ -61,7 +61,6 @@ var myGame = function($, undefined) {
             model : {},
             newModel : function() {
                 this.model = getNewKitten();
-                console.log(this.model);
                 game.modelContainer.html(this.model.draw());
             },
             addToScore : function(points) {
@@ -116,7 +115,6 @@ var myGame = function($, undefined) {
                 this.choicePlate.append(choiceContent);
                 // Bind click on kittens of place choice -----------------------------
                 this.choicePlate.on('click.meaow', '.k', function() {
-                    console.log($(this).attr('class'));
                     _game.justClicked = $(this).attr('class');
                     game.compareClickedAndModel();
                 });
