@@ -8,17 +8,19 @@ var myGame = function($, undefined) {
         var justfound = false;
         var found = [];
         var available = [
-                'titi', 'tata', 'toto'
+                'titi', 'tata', 'toto', 'maze'
             ];
         var names = {
             titi: 'A simple memory',
             tata: 'A chewing-gum and some hearts',
-            toto: 'Arkabloid'
+            toto: 'Arkabloid',
+            maze: 'Amazing blob maze'
         };
         var links = {
             titi: 'index.html',
             tata: '2_simple_laby/index.html',
-            toto: '3_arkabloid/index.html'
+            toto: '3_arkabloid/index.html',
+            maze: '4_true_laby/index.html'
         }
         // Public game object
         var game = {
