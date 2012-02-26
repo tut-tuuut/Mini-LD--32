@@ -6,20 +6,20 @@
  *   Step by step game creation tutorial
  *
  **/
-alreadylogged = false;
+
 //game resources
 var g_resources = [{
-    name: 'laby',
+    name: 'truelaby',
     type: 'image',
-    src: 'laby.png'
+    src: 'truelaby.png'
 },{
     name: 'collision',
     type: 'image',
     src: 'collision.png'
 }, {
-    name: 'laby',
+    name: 'maze',
     type: 'tmx',
-    src:  'laby.tmx'
+    src:  'maze.tmx'
 },
 {
     name: 'blob',
@@ -37,77 +37,14 @@ var g_resources = [{
     src : 'win.png'
 },
 {
-    name: 'trampoline',
+    name: 'bg',
     type: 'image',
-    src: 'trampoline.png'
-},
-{
-    name: 'brick1',
+    src: 'bg.png'
+},{
+    name: 'nuages',
     type: 'image',
-    src: 'brick1.png'
-},
-{
-    name: 'brick2',
-    type: 'image',
-    src: 'brick2.png'
+    src: 'nuages.png'
 }];
-
-/*------------------- 
-a player entity
--------------------------------- */
-var TrampolineEntity = me.ObjectEntity.extend({
-
-    /* -----
-
-    constructor
-
-    ------ */
-
-    init: function(x, y, settings) {
-
-        // call the constructor
-        this.parent(x, y, settings);
-
-        // set the walking & jumping speed
-        this.setVelocity(6, 15);
-
-        // set the display to follow our position on both axis
-        this.collidable = true;
-        this.type = me.game.ENEMY_OBJECT;
-        
-        // set the display to follow our position on both axis
-        me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
-    },
-
-    /* -----
-
-    update the player pos
-
-    ------ */
-    update: function() {
-
-        if (me.input.isKeyPressed('left')) {
-            this.doWalk(true);
-        } else if (me.input.isKeyPressed('right')) {
-            this.doWalk(false);
-        } else {
-            this.vel.x = 0;
-        }
-
-
-        // check & update player movement
-        this.updateMovement();
-
-        // update animation if necessary
-        if (this.vel.x!=0 || this.vel.y!=0) {
-            // update objet animation
-            this.parent(this);
-            return true;
-        }
-        return false;
-    }
-
-});
 
 
 /*------------------- 
@@ -128,7 +65,10 @@ var BlobEntity = me.ObjectEntity.extend({
 
         // set the walking & jumping speed
         this.setVelocity(3, 15);
-        this.gravity = 0.2;
+        this.defaultVelocity = 3;
+        
+        // set the display to follow our position on both axis
+        me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     },
 
     /* -----
@@ -138,17 +78,6 @@ var BlobEntity = me.ObjectEntity.extend({
     ------ */
     update: function() {
 
-        // bounce on walls
-        if (this.vel.y != 0) {
-            if (this.pos.x <= 25) {
-                this.vel.x = Math.max(this.vel.x, 10);
-            } else if (this.pos.x >= 760) {
-                this.vel.x = Math.min(-this.vel.x, -10);
-            }
-        } else if (this.pos.y <= 615) {
-            // f*** don't walk when you're on the ground
-            this.vel.x = 0;
-        }
 
         // check & update player movement
         this.updateMovement();
@@ -156,25 +85,18 @@ var BlobEntity = me.ObjectEntity.extend({
 
         // check for collision
         var res = me.game.collide(this);
-        if (res) {
-            if (res.obj.type == me.game.ENEMY_OBJECT ) {
-                if (this.vel.y != 0) {
-                    this.vel.y = - 2*this.accel.y*this.vel.y;
-                    console.log(res.obj.pos.x, this.pos.x, res.obj.pos.x - this.pos.x);
-                    this.vel.x = -2*(res.obj.pos.x - this.pos.x + 36) - this.vel.x;
-                }
-            } else if (res.obj.type == me.game.COLLECTABLE_OBJECT) {
-                this.vel.y = - this.vel.y;
-            }
-        }
-        if (me.input.isKeyPressed('jump') && this.vel.x == 0 && this.vel.y == 0) {
-            this.vel.x = Math.floor(20*Math.random()) - 10;
-            if (this.pos.x >= 760) {
-                this.vel.x = -10;
-            } else if (this.pos.x <= 20) {
-                this.vel.y = 10;
-            }
-            this.doJump();
+
+        if (me.input.isKeyPressed('left')) {
+            this.doWalk(true);
+        } else if (me.input.isKeyPressed('right')) {
+            this.doWalk(false);
+        } else if (me.input.isKeyPressed('top')) {
+            this.doClimb(true);
+        } else if (me.input.isKeyPressed('bottom')) {
+            this.doClimb(false);
+        } else {
+            this.vel.x = 0;
+            this.vel.y = 0;
         }
         // update animation if necessary
         if (this.vel.x!=0 || this.vel.y!=0) {
@@ -187,32 +109,22 @@ var BlobEntity = me.ObjectEntity.extend({
 
 });
 
-/*----------------
- a Brick entity
------------------------- */
-var BrickEntity = (function() {
-    var totalBricks = 0;
-    var collectedBricks = 0;
-    return me.CollectableEntity.extend({
-        // extending the init function is not mandatory
-        // unless you need to add some extra initialization
-        init: function(x, y, settings) {
-            totalBricks++;
-            // call the parent constructor
-            this.parent(x, y, settings);
-        },
+var HeartEntity = me.CollectableEntity.extend({
+    // extending the init function is not mandatory
+    // unless you need to add some extra initialization
+    init: function(x, y, settings) {
+        // call the parent constructor
+        this.parent(x, y, settings);
+    },
 
-        // this function is called by the engine, when
-        // an object is destroyed (here collected)
-        onDestroyEvent: function() {
-                collectedBricks++;
-                if (collectedBricks == totalBricks) {
-                    me.state.change(me.state.GAME_END);
-                }
-            }
+    // this function is called by the engine, when
+    // an object is destroyed (here collected)
+    // at least here it's not too complicated.
+    onDestroyEvent: function() {
+        me.state.change(me.state.GAME_END);
+    }
 
-    })
-    }());
+});
 
 var jsApp	= 
 {	
@@ -224,7 +136,7 @@ var jsApp	=
     onload: function()
     {
         // init the video
-        if (!me.video.init('jsapp', 800, 640, false, 1.0))
+        if (!me.video.init('jsapp', 200, 200, false, 1.0))
         {
             alert("Sorry but your browser does not support html 5 canvas.");
             return;
@@ -259,13 +171,14 @@ var jsApp	=
         me.state.set(me.state.GAME_END, new WinScreen());
 
         // add our player entity in the entity pool
-        me.entityPool.add("trampoline", TrampolineEntity);
         me.entityPool.add("blob", BlobEntity);
-        me.entityPool.add("brick", BrickEntity);
+        me.entityPool.add("heart", HeartEntity);
            
         // enable the keyboard
         me.input.bindKey(me.input.KEY.LEFT,	"left");
         me.input.bindKey(me.input.KEY.RIGHT,	"right");
+        me.input.bindKey(me.input.KEY.UP,	"top");
+        me.input.bindKey(me.input.KEY.DOWN,	"bottom");
         me.input.bindKey(me.input.KEY.X,     "jump", true);
         me.input.bindKey(me.input.KEY.ESC,   'hold');
         // start the game 
@@ -281,7 +194,7 @@ var PlayScreen = me.ScreenObject.extend(
 
     onResetEvent: function()
     {	
-        me.levelDirector.loadLevel('laby');
+        me.levelDirector.loadLevel('maze');
     },
 	
 	
